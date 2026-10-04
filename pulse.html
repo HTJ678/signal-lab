@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Signal Lab · 门函数 ⊛ 冲激串</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <p class="nav"><a href="./index.html">← 回到谐波合成器</a></p>
+      <h1>门 <span>⊛</span> 冲激串</h1>
+      <p class="sub">周期脉冲串不是背出来的，是<b>造</b>出来的：把门函数在每个冲激上盖一次章 —— 时域卷积，频域相乘。</p>
+
+      <div class="layout">
+        <aside class="panel">
+          <h2>控制台</h2>
+          <div class="ctrl">
+            <label>门宽 τ <span class="val" id="dutyOut">0.25</span>（周期 T = 1）</label>
+            <input type="range" id="duty" min="0.02" max="0.5" value="0.25" step="0.01" />
+          </div>
+          <div class="ctrl">
+            <label>基频 f <span class="val" id="fOut">220</span> Hz</label>
+            <input type="range" id="freq" min="80" max="440" value="220" step="10" />
+          </div>
+          <div class="row">
+            <button id="play">▶︎ 播放</button>
+            <button id="square" class="ghost">τ = 0.5（方波）</button>
+          </div>
+
+          <div class="stats">
+            <div><span>主瓣宽度 1/τ</span><b id="lobe">4.00</b></div>
+            <div><span>第一个零点 f = 1/τ</span><b id="firstZero">4</b></div>
+            <div><span>该处谐波</span><b id="zeroHarmonic">n = 4 消失</b></div>
+            <div><span>零点落在</span><b id="zeros">4, 8, 12 …</b></div>
+          </div>
+        </aside>
+
+        <section class="stage">
+          <details class="guide">
+            <summary>怎么读这三张图（第一次看建议展开）</summary>
+            <div class="guide-body">
+              <p><b>时域三行不是三个东西，是同一个动作的三个阶段：</b>① 要在<b>哪些时刻</b>盖章（冲激串） → ② 要盖的<b>章</b>长什么样（门函数，宽 τ） → ③ 盖完之后满地的印子（周期脉冲串）。这就是"卷积"这个词的全部含义：<em>把一个函数搬到每个冲激上，再叠加起来</em>。</p>
+              <p><b>频域那张图回答的是"凭什么是这个形状的谱"：</b></p>
+              <p>· <em>灰色虚线</em> = <b>一个门函数单独</b>的频谱（连续曲线，sinc 形状，主瓣宽度 = 1/τ）</p>
+              <p>· <em>蓝色柱子</em> = 脉冲串<b>实际有的频率成分</b>（只能待在整数位置）</p>
+              <p>· 柱子高度 = 灰虚线在那个位置<b>取样</b>的结果 → 所以<b>包络为零的地方，柱子就没了</b>（τ = 0.25 时 4、8、12… 处消失）</p>
+              <p>一句话：<b>时域盖章 = 频域取样</b>。</p>
+            </div>
+          </details>
+
+          <div class="card">
+            <h3>跟着做三步（会自动播放，听着看）</h3>
+            <div class="steps" id="steps">
+              <button data-step="0">1. τ = 0.5（变方波）</button>
+              <button data-step="1">2. τ = 0.25（每第 4 根消失）</button>
+              <button data-step="2">3. τ = 0.1（更窄、更亮）</button>
+            </div>
+            <div class="stepNote" id="stepNote">点第 1 步开始 —— 三步走完你就知道"脉冲串的谱为什么长这样"了。</div>
+          </div>
+
+          <div class="card">
+            <h3>时域 · 卷积就是"盖章"</h3>
+            <canvas id="timeCanvas"></canvas>
+            <div class="legend">
+              <span><u></u>卷积结果：周期脉冲串 p(t)</span>
+              <span><i></i>门函数 g(t)（每个冲激上盖一次）</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>频域 · 相乘就是"取样"</h3>
+            <canvas id="specCanvas"></canvas>
+            <div class="legend">
+              <span><i></i>门函数的连续谱 G(f) = τ·sinc(τf)</span>
+              <span><u></u>谱线 = 冲激串的梳齿 × 包络（离散值）</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>一句话</h3>
+            <div class="formula">p(t) = g(t) ⊛ Σₙ δ(t − nT)　　⇔　　P(f) = G(f) · (1/T)·Σₙ δ(f − n/T)</div>
+            <div class="formula now" id="nowline"></div>
+            <div class="formula-note" id="note"></div>
+          </div>
+        </section>
+      </div>
+
+      <footer>
+        <ul>
+          <li><b>时域</b>：卷积 = 把一个门函数"盖"在每个冲激上，叠加起来就是周期脉冲串。</li>
+          <li><b>频域</b>：相乘 = 用 sinc 包络去<b>取样</b>一根根梳齿，得到的就是那些离散谱线。</li>
+          <li>所以"每第 4 根谐波为零"不是巧合：τ = 0.25 时 sinc 的零点正好落在 f = 4, 8, 12…（即 n = 1/τ 的整数倍）。</li>
+          <li>门越窄 → 包络越宽 → 谐波越多 → 声音越亮（这就是<b>时宽与带宽成反比</b>）。</li>
+        </ul>
+      </footer>
+    </main>
+
+    <script type="module" src="./src/pulse.js?v=2"></script>
+  </body>
+</html>

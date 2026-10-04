@@ -1,0 +1,90 @@
+/* Shared shell for signal-lab pages. index.html still carries its own copy
+   inline (so it keeps working if this file is missing); new pages link this. */
+:root {
+  --bg: #0b0f19;
+  --panel: #121826;
+  --line: #1f2937;
+  --text: #e5e7eb;
+  --dim: #94a3b8;
+  --accent: #7dd3fc;
+  --accent2: #f9a8d4;
+  --warn: #fbbf24;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); }
+body {
+  font: 15px/1.6 ui-sans-serif, system-ui, "Segoe UI", "Microsoft YaHei", sans-serif;
+  display: flex; justify-content: center; padding: 26px 16px 46px;
+}
+.wrap { width: min(1080px, 100%); }
+h1 { margin: 0; font-size: 26px; letter-spacing: .5px; }
+h1 span { color: var(--accent); }
+.sub { margin: 4px 0 18px; color: var(--dim); }
+.nav { margin: 0 0 16px; font-size: 14px; }
+.nav a { color: var(--accent2); text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+
+.layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 820px) { .layout { grid-template-columns: 1fr; } }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+.panel h2 { margin: 0 0 12px; font-size: 15px; color: var(--accent); letter-spacing: .5px; }
+
+.ctrl { margin-top: 14px; }
+.ctrl label { display: block; color: var(--dim); font-size: 13px; margin-bottom: 4px; }
+.ctrl .val { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+.row { display: flex; gap: 8px; margin-top: 16px; }
+.row button {
+  flex: 1; border: 0; border-radius: 10px; padding: 10px; font: inherit; font-weight: 600;
+  background: var(--accent); color: #04212e; cursor: pointer;
+}
+.row button.ghost { background: transparent; color: var(--dim); border: 1px solid var(--line); }
+
+.stats { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; font-size: 13px; color: var(--dim); }
+.stats div { display: flex; justify-content: space-between; gap: 10px; margin: 5px 0; }
+.stats b { color: var(--text); font-weight: 600; }
+.stats b.hot { color: var(--warn); }
+
+.stage { display: grid; gap: 14px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+.card h3 { margin: 0 0 8px; font-size: 14px; color: var(--dim); font-weight: 600; letter-spacing: .3px; }
+canvas { width: 100%; display: block; border-radius: 10px; background: #080d16; }
+#timeCanvas { height: 300px; }
+#specCanvas { height: 220px; }
+
+.formula {
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: 14px; line-height: 1.8; overflow-wrap: anywhere;
+}
+.formula.now { color: var(--accent); margin-top: 6px; font-size: 15px; }
+.formula-note {
+  color: var(--dim); font-size: 12.5px; margin-top: 9px;
+  font-family: ui-monospace, Consolas, monospace; line-height: 1.6;
+}
+.legend { display: flex; gap: 18px; color: var(--dim); font-size: 13px; margin-top: 8px; flex-wrap: wrap; }
+.legend i { display: inline-block; width: 18px; height: 0; border-top: 2px dashed #64748b; vertical-align: middle; margin-right: 6px; }
+.legend u { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--accent); vertical-align: middle; margin-right: 6px; }
+
+.guide { background: #0e1626; border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.guide summary { cursor: pointer; color: var(--accent); font-size: 14px; font-weight: 600; list-style: none; }
+.guide summary::-webkit-details-marker { display: none; }
+.guide summary::before { content: "▸ "; }
+.guide[open] summary::before { content: "▾ "; }
+.guide-body { margin-top: 10px; color: var(--text); font-size: 14px; line-height: 1.75; }
+.guide-body p { margin: 6px 0; }
+.guide-body b { color: var(--accent); }
+.guide-body em { color: var(--accent2); font-style: normal; }
+.steps { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 10px; }
+.steps button {
+  border: 1px solid var(--line); background: #0e1626; color: var(--text);
+  border-radius: 10px; padding: 8px 12px; font: inherit; font-size: 13.5px; cursor: pointer;
+}
+.steps button.on { background: #16233a; border-color: #2b5f8f; color: var(--accent); font-weight: 600; }
+.stepNote { color: var(--dim); font-size: 13.5px; line-height: 1.7; min-height: 3.4em; }
+.stepNote b { color: var(--accent); }
+
+footer { margin-top: 22px; color: var(--dim); font-size: 14px; }
+footer ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.kbd { background: #1e293b; border-radius: 5px; padding: 1px 6px; color: var(--accent2); }

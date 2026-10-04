@@ -1,0 +1,20 @@
+{
+  "name": "signal-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Harmonic synthesiser: watch a Fourier series build a waveform in the time and frequency domain, and hear it. Pure static web, hand-written FFT.",
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "serve": "node dev-server.mjs"
+  },
+  "keywords": [
+    "fourier",
+    "harmonics",
+    "fft",
+    "signal-processing",
+    "web-audio",
+    "education"
+  ],
+  "license": "MIT"
+}
